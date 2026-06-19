@@ -1,0 +1,115 @@
+import type { ColumnDefBase, SortEntry, RangeFilter } from './types'
+
+function asRecord(row: object): Record<string, unknown> {
+  return row as Record<string, unknown>
+}
+
+export function processData<TRow extends object>(
+  data: TRow[],
+  filters: Record<string, Set<string>>,
+  rangeFilters: Record<string, RangeFilter>,
+  sorts: SortEntry[],
+): TRow[] {
+  let result = [...data]
+
+  for (const [key, vals] of Object.entries(filters)) {
+    if (vals.size > 0) result = result.filter(row => vals.has(String(asRecord(row)[key] ?? '')))
+  }
+
+  for (const [key, range] of Object.entries(rangeFilters)) {
+    if (range.min !== '') result = result.filter(r => Number(asRecord(r)[key]) >= Number(range.min))
+    if (range.max !== '') result = result.filter(r => Number(asRecord(r)[key]) <= Number(range.max))
+  }
+
+  if (sorts.length > 0) {
+    result.sort((a, b) => {
+      for (const { key, dir } of sorts) {
+        const va = asRecord(a)[key]
+        const vb = asRecord(b)[key]
+        let cmp = 0
+        if (typeof va === 'number' && typeof vb === 'number') cmp = va - vb
+        else cmp = String(va ?? '').localeCompare(String(vb ?? ''))
+        if (cmp !== 0) return dir === 'asc' ? cmp : -cmp
+      }
+      return 0
+    })
+  }
+
+  return result
+}
+
+export function groupData<TRow extends object>(
+  data: TRow[],
+  groupBy: string[],
+): Array<{ key: string | null; rows: TRow[] }> {
+  if (groupBy.length === 0) return [{ key: null, rows: data }]
+  const groups: Record<string, TRow[]> = {}
+  for (const row of data) {
+    const gkey = groupBy.map(g => String(asRecord(row)[g] ?? '')).join(' › ')
+    if (!groups[gkey]) groups[gkey] = []
+    groups[gkey].push(row)
+  }
+  return Object.entries(groups).map(([key, rows]) => ({ key, rows }))
+}
+
+export function computeStringValues<TRow extends object>(
+  data: TRow[],
+  columns: ColumnDefBase<TRow>[],
+): Record<string, string[]> {
+  const map: Record<string, string[]> = {}
+  const cols = columns.filter(c => c.type !== 'number' && c.type !== 'date' && c.filterable !== false)
+  for (const col of cols) {
+    const values = [...new Set(data.map(r => String(asRecord(r)[col.key] ?? '')))]
+    map[col.key] = values.sort()
+  }
+  return map
+}
+
+export function toggleSort(sorts: SortEntry[], key: string): SortEntry[] {
+  const existing = sorts.find(s => s.key === key)
+  if (!existing) return [...sorts, { key, dir: 'asc' }]
+  if (existing.dir === 'asc') return sorts.map(s => s.key === key ? { ...s, dir: 'desc' as const } : s)
+  return sorts.filter(s => s.key !== key)
+}
+
+export function toggleFilter(
+  filters: Record<string, Set<string>>,
+  key: string,
+  value: string,
+): Record<string, Set<string>> {
+  const next = new Set(filters[key] ?? [])
+  if (next.has(value)) next.delete(value)
+  else next.add(value)
+  return { ...filters, [key]: next }
+}
+
+export function toggleGroupBy(groupBy: string[], key: string): string[] {
+  return groupBy.includes(key) ? groupBy.filter(k => k !== key) : [...groupBy, key]
+}
+
+export function toggleCollapse(collapsedGroups: Set<string>, key: string): Set<string> {
+  const next = new Set(collapsedGroups)
+  if (next.has(key)) next.delete(key)
+  else next.add(key)
+  return next
+}
+
+export function getSortIcon(sorts: SortEntry[], key: string): string {
+  const s = sorts.find(s => s.key === key)
+  return s ? (s.dir === 'asc' ? '↑' : '↓') : '↕'
+}
+
+export function getSortIndex(sorts: SortEntry[], key: string): number | null {
+  const i = sorts.findIndex(s => s.key === key)
+  return i >= 0 ? i + 1 : null
+}
+
+export function countActiveFilters(
+  filters: Record<string, Set<string>>,
+  rangeFilters: Record<string, RangeFilter>,
+): number {
+  return (
+    Object.values(filters).filter(v => v.size > 0).length +
+    Object.values(rangeFilters).filter(v => v.min !== '' || v.max !== '').length
+  )
+}

@@ -1,4 +1,4 @@
-import { DataTable, Badge, ScoreBar, type ColumnDef } from '@vates/flexi-table-react'
+import { DataTable, Badge, ScoreBar, LABELS_EN, type ColumnDef } from '@vates/flexi-table-react'
 
 interface Employee {
   id: number; name: string; department: string; role: string
@@ -39,15 +39,15 @@ const STATUS_COLORS = {
 
 const COLUMNS: ColumnDef<Employee>[] = [
   { key: 'id', label: 'ID', type: 'number', width: 60, filterable: false },
-  { key: 'name', label: 'Nom', type: 'string', width: 160 },
-  { key: 'department', label: 'Département', type: 'string', width: 130, groupable: true,
+  { key: 'name', label: 'Name', type: 'string', width: 160 },
+  { key: 'department', label: 'Department', type: 'string', width: 130, groupable: true,
     render: v => <Badge value={String(v)} colorMap={DEPT_COLORS} />,
     renderFilterLabel: v => <Badge value={v} colorMap={DEPT_COLORS} /> },
-  { key: 'role', label: 'Rôle', type: 'string', width: 140, groupable: true },
-  { key: 'salary', label: 'Salaire', type: 'number', width: 110,
-    format: v => Number(v).toLocaleString('fr-FR') + ' €' },
-  { key: 'joined', label: 'Arrivée', type: 'date', width: 100, filterable: false },
-  { key: 'status', label: 'Statut', type: 'string', width: 90, groupable: true,
+  { key: 'role', label: 'Role', type: 'string', width: 140, groupable: true },
+  { key: 'salary', label: 'Salary', type: 'number', width: 110,
+    format: v => Number(v).toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }) },
+  { key: 'joined', label: 'Joined', type: 'date', width: 100, filterable: false },
+  { key: 'status', label: 'Status', type: 'string', width: 90, groupable: true,
     render: v => <Badge value={String(v)} colorMap={STATUS_COLORS} />,
     renderFilterLabel: v => <Badge value={v} colorMap={STATUS_COLORS} /> },
   { key: 'score', label: 'Score', type: 'number', width: 80,
@@ -61,7 +61,7 @@ export default function App() {
       <p style={{ fontSize: 14, color: 'var(--color-text-secondary)', marginTop: 0, marginBottom: 24 }}>
         @vates/flexi-table-react
       </p>
-      <DataTable data={SAMPLE_DATA} columns={COLUMNS} rowKey="id" />
+      <DataTable data={SAMPLE_DATA} columns={COLUMNS} rowKey="id" labels={LABELS_EN} />
     </div>
   )
 }

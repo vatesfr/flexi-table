@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DataTable, Badge, ScoreBar, type ColumnDef } from '@vates/flexi-table-vue'
+import { DataTable, Badge, ScoreBar, LABELS_EN, type ColumnDef } from '@vates/flexi-table-vue'
 
 interface Employee {
   id: number; name: string; department: string; role: string
@@ -40,14 +40,14 @@ const STATUS_COLORS = {
 
 const COLUMNS: ColumnDef<Employee>[] = [
   { key: 'id', label: 'ID', type: 'number', width: 60, filterable: false },
-  { key: 'name', label: 'Nom', type: 'string', width: 160 },
-  { key: 'department', label: 'Département', type: 'string', width: 130, groupable: true,
+  { key: 'name', label: 'Name', type: 'string', width: 160 },
+  { key: 'department', label: 'Department', type: 'string', width: 130, groupable: true,
     format: v => String(v) },
-  { key: 'role', label: 'Rôle', type: 'string', width: 140, groupable: true },
-  { key: 'salary', label: 'Salaire', type: 'number', width: 110,
-    format: v => Number(v).toLocaleString('fr-FR') + ' €' },
-  { key: 'joined', label: 'Arrivée', type: 'date', width: 100, filterable: false },
-  { key: 'status', label: 'Statut', type: 'string', width: 90, groupable: true },
+  { key: 'role', label: 'Role', type: 'string', width: 140, groupable: true },
+  { key: 'salary', label: 'Salary', type: 'number', width: 110,
+    format: v => Number(v).toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }) },
+  { key: 'joined', label: 'Joined', type: 'date', width: 100, filterable: false },
+  { key: 'status', label: 'Status', type: 'string', width: 90, groupable: true },
   { key: 'score', label: 'Score', type: 'number', width: 80 },
 ]
 </script>
@@ -59,7 +59,7 @@ const COLUMNS: ColumnDef<Employee>[] = [
       @vates/flexi-table-vue
     </p>
 
-    <DataTable :data="SAMPLE_DATA" :columns="COLUMNS" row-key="id">
+    <DataTable :data="SAMPLE_DATA" :columns="COLUMNS" row-key="id" :labels="LABELS_EN">
 
       <!-- Custom cell rendering via named slots -->
       <template #cell-department="{ value }">

@@ -44,23 +44,4 @@ export interface DataTableLabels {
   rowsInGroup: (count: number) => string
 }
 
-export const DEFAULT_LABELS: DataTableLabels = {
-  columns: 'Colonnes',
-  columnsSection: 'Affichage',
-  sort: 'Trier',
-  sortSection: 'Colonnes à trier',
-  clearSorts: '× Effacer les tris',
-  filter: 'Filtrer',
-  numericRanges: 'Plages numériques',
-  min: 'Min',
-  max: 'Max',
-  clearFilters: '× Effacer les filtres',
-  group: 'Grouper',
-  groupSection: 'Grouper par',
-  clearGroups: '× Effacer les groupes',
-  clearAll: '× Tout effacer',
-  rowCount: (f, t) => `${f} / ${t} ligne${t > 1 ? 's' : ''}`,
-  groupCount: n => ` · ${n} groupe${n > 1 ? 's' : ''}`,
-  groupLabel: i => `Groupe ${i}`,
-  rowsInGroup: n => `${n} ligne${n > 1 ? 's' : ''}`,
-}
+export { LABELS_EN as DEFAULT_LABELS } from './locales'

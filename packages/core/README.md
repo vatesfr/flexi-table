@@ -13,7 +13,12 @@ ColumnDefBase<TRow extends object>  // column definition (key, label, type, form
 SortEntry                           // { key: string; dir: 'asc' | 'desc' }
 RangeFilter                         // { min: string; max: string }
 DataTableLabels                     // all UI strings + 4 pluralization functions
-DEFAULT_LABELS                      // French defaults
+DEFAULT_LABELS                      // English defaults (alias for LABELS_EN)
+LABELS_EN                           // English
+LABELS_FR                           // French
+LABELS_ES                           // Spanish
+LABELS_DE                           // German
+LABELS_PT                           // Portuguese
 ```
 
 ### Pure functions

@@ -16,7 +16,7 @@ A flexible, fully-typed data table for React and Vue 3 — with sorting, filteri
 - Value checklist filters and numeric range filters
 - Column visibility toggle
 - Row grouping (grouped column hides from the table automatically)
-- i18n via a `labels` prop — defaults to French
+- i18n via a `labels` prop — defaults to English, with built-in locales for FR, ES, DE, PT
 - Custom cell rendering via render props (React) or scoped slots (Vue)
 - Fully typed with TypeScript generics (`TRow extends object`)
 
@@ -90,21 +90,17 @@ const COLUMNS: ColumnDef<User>[] = [
 
 ## i18n
 
-All UI strings are in French by default. Override any or all via the `labels` prop:
+All UI strings are in English by default. Use a built-in locale or supply any overrides via the `labels` prop:
 
 ```tsx
-const EN_LABELS = {
-  columns: 'Columns',
-  sort: 'Sort',
-  filter: 'Filter',
-  group: 'Group',
-  clearAll: '× Clear all',
-  rowCount: (f, t) => `${f} of ${t} row${t !== 1 ? 's' : ''}`,
-  // ... see DataTableLabels in @vates/flexi-table-core for the full list
-}
+import { LABELS_FR } from '@vates/flexi-table-core'
 
-<DataTable labels={EN_LABELS} ... />
+<DataTable labels={LABELS_FR} ... />
 ```
+
+Built-in locales: `LABELS_EN` (default), `LABELS_FR`, `LABELS_ES`, `LABELS_DE`, `LABELS_PT`.
+
+You can also pass a `Partial<DataTableLabels>` to override individual strings — it is shallow-merged over the default English labels.
 
 ## Column definition
 

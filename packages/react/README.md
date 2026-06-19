@@ -56,7 +56,7 @@ const COLUMNS: ColumnDef<Employee>[] = [
 | `columns` | `ColumnDef<TRow>[]` | — | Column definitions |
 | `rowKey` | `keyof TRow & string` | — | Unique row identifier |
 | `defaultVisibleColumns` | `string[]` | all | Initially visible column keys |
-| `labels` | `Partial<DataTableLabels>` | French | UI string overrides |
+| `labels` | `Partial<DataTableLabels>` | English | UI string overrides |
 
 ## Column definition
 
@@ -99,23 +99,15 @@ const {
 
 ## i18n
 
+Use a built-in locale or supply any `Partial<DataTableLabels>` overrides (shallow-merged over English defaults):
+
 ```tsx
-import type { DataTableLabels } from '@vates/flexi-table-core'
+import { LABELS_FR } from '@vates/flexi-table-core'
 
-const LABELS: Partial<DataTableLabels> = {
-  columns: 'Columns',
-  sort: 'Sort',
-  filter: 'Filter',
-  group: 'Group',
-  clearAll: '× Clear all',
-  rowCount: (f, t) => `${f} of ${t} row${t !== 1 ? 's' : ''}`,
-  groupCount: n => ` · ${n} group${n !== 1 ? 's' : ''}`,
-  groupLabel: i => `Group ${i}`,
-  rowsInGroup: n => `${n} row${n !== 1 ? 's' : ''}`,
-}
-
-<DataTable labels={LABELS} ... />
+<DataTable labels={LABELS_FR} ... />
 ```
+
+Built-in locales: `LABELS_EN` (default), `LABELS_FR`, `LABELS_ES`, `LABELS_DE`, `LABELS_PT`.
 
 ## License
 

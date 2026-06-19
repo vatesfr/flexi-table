@@ -102,7 +102,7 @@ const {
 Use a built-in locale or supply any `Partial<DataTableLabels>` overrides (shallow-merged over English defaults):
 
 ```tsx
-import { LABELS_FR } from '@vates/flexi-table-core'
+import { LABELS_FR } from '@vates/flexi-table-react'
 
 <DataTable labels={LABELS_FR} ... />
 ```

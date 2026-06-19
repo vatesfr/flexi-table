@@ -6,9 +6,11 @@ export default defineConfig({
   plugins: [dts({ include: ['src'], rollupTypes: true, insertTypesEntry: true })],
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: {
+        index: resolve(__dirname, 'src/index.ts'),
+        locales: resolve(__dirname, 'src/locales.ts'),
+      },
       name: 'FlexiTableCore',
-      fileName: 'index',
       formats: ['es', 'cjs'],
     },
   },

@@ -114,7 +114,7 @@ const {
 Use a built-in locale or supply any `Partial<DataTableLabels>` overrides (shallow-merged over English defaults):
 
 ```ts
-import { LABELS_FR } from '@vates/flexi-table-core'
+import { LABELS_FR } from '@vates/flexi-table-vue'
 ```
 
 ```vue

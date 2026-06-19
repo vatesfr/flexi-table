@@ -74,12 +74,18 @@ When a column is added to `groupBy`, `useTableState` removes it from `activeColu
 
 ### i18n
 
-`DataTableLabels` in `packages/core/src/types.ts` defines 12 static string keys and 4 pluralization functions (`rowCount(filtered, total)`, `groupCount(n)`, `groupLabel(index)`, `rowsInGroup(n)`). `DEFAULT_LABELS` is French. Both adapters accept a `labels?: Partial<DataTableLabels>` prop/option that is shallow-merged over the defaults.
+`DataTableLabels` in `packages/core/src/types.ts` defines 12 static string keys and 4 pluralization functions (`rowCount(filtered, total)`, `groupCount(n)`, `groupLabel(index)`, `rowsInGroup(n)`). `DEFAULT_LABELS` is English. Both adapters accept a `labels?: Partial<DataTableLabels>` prop/option that is shallow-merged over the defaults.
+
+Built-in locales (`LABELS_EN`, `LABELS_FR`, `LABELS_ES`, `LABELS_DE`, `LABELS_PT`) live in `packages/core/src/locales.ts` and are re-exported from both adapter packages — consumers import them from `@vates/flexi-table-react` or `@vates/flexi-table-vue` without depending on core directly.
+
+### Sub-path exports
+
+Core exposes a `@vates/flexi-table-core/locales` sub-path export (built to `dist/locales.js/.cjs/.d.ts`) so adapter packages can barrel-re-export all locales with a single `export * from '@vates/flexi-table-core/locales'`. This means adding a new locale to `packages/core/src/locales.ts` automatically makes it available from both adapter packages with no further changes.
 
 ### Cross-package resolution in development
 
 Packages and demo apps resolve each other without a build step via:
-- **`tsconfig.json` `paths`** — points `@vates/flexi-table-*` to `../*/src/index.ts` for type checking
-- **`vite.config.ts` `resolve.alias`** — points the same package names to source files for HMR
+- **`tsconfig.json` `paths`** — maps `@vates/flexi-table-core` → `../core/src/index.ts` and `@vates/flexi-table-core/locales` → `../core/src/locales.ts` for type checking
+- **`vite.config.ts` `resolve.alias`** — maps `@vates/flexi-table-core` to the `packages/core/src` **directory** (not `index.ts`) so Vite's prefix substitution resolves both the bare import and the `/locales` sub-path correctly
 
 In production, `npm run build` must run `core` before `react` and `vue` since they import from its `dist/`.

@@ -9,7 +9,8 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "paths": {
-      "@vates/flexi-table-core": ["../core/src/index.ts"]
+      "@vates/flexi-table-core": ["../core/src/index.ts"],
+      "@vates/flexi-table-core/locales": ["../core/src/locales.ts"]
     }
   },
   "include": ["src"],

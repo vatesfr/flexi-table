@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@vates/flexi-table-core': resolve(__dirname, '../../packages/core/src/index.ts'),
+      '@vates/flexi-table-core': resolve(__dirname, '../../packages/core/src'),
       '@vates/flexi-table-react': resolve(__dirname, '../../packages/react/src/index.ts'),
     },
   },

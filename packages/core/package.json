@@ -19,6 +19,11 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
+    },
+    "./locales": {
+      "import": "./dist/locales.js",
+      "require": "./dist/locales.cjs",
+      "types": "./dist/locales.d.ts"
     }
   },
   "files": ["dist"],

@@ -529,7 +529,9 @@ export function createFlexiTable<TRow extends object>(
   }
 
   function handleDocClick(e: MouseEvent): void {
-    if (openDropdown !== null && !container.contains(e.target as Node)) {
+    // composedPath() captures the dispatch-time path, so it stays correct even
+    // after innerHTML re-renders detach the original target from the DOM.
+    if (openDropdown !== null && !e.composedPath().includes(container)) {
       openDropdown = null
       render()
     }

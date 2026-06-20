@@ -47,7 +47,6 @@ describe('createFlexiTable', () => {
     // container.contains(e.target). After innerHTML re-renders the target is
     // detached, so the check returns false and the dropdown closes immediately.
     // Stopping propagation at the container boundary prevents this in tests.
-    container.addEventListener('click', (e) => e.stopPropagation())
   })
 
   afterEach(() => {

@@ -9,6 +9,7 @@ labels: enhancement
 - [ ] `@vates/flexi-table-core`
 - [ ] `@vates/flexi-table-react`
 - [ ] `@vates/flexi-table-vue`
+- [ ] `@vates/flexi-table-vanilla`
 
 **Problem / motivation**
 

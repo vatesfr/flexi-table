@@ -6,10 +6,11 @@
     "demo/*"
   ],
   "scripts": {
-    "build": "npm run build -w packages/core && npm run build -w packages/react && npm run build -w packages/vue",
+    "build": "npm run build -w packages/core && npm run build -w packages/react && npm run build -w packages/vue && npm run build -w packages/vanilla",
     "dev:react": "npm run dev -w demo/react",
     "dev:vue": "npm run dev -w demo/vue",
-    "type-check": "npm run type-check -w packages/core && npm run type-check -w packages/react",
+    "dev:vanilla": "npm run dev -w demo/vanilla",
+    "type-check": "npm run type-check -w packages/core && npm run type-check -w packages/react && npm run type-check -w packages/vanilla",
     "test": "npm run test -w packages/core",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Install all workspace dependencies
 npm install
 
-# Build all packages (must run in order: core → react → vue)
+# Build all packages (must run in order: core → react → vue → vanilla)
 npm run build
 
 # Start the React demo dev server (hot-reloads against package sources, no build needed)
@@ -17,31 +17,37 @@ npm run dev:react
 # Start the Vue demo dev server
 npm run dev:vue
 
-# Type-check core and react packages
+# Start the Vanilla demo dev server
+npm run dev:vanilla
+
+# Type-check core, react, and vanilla packages
 npm run type-check
 
 # Build a single package
 npm run build -w packages/core
 npm run build -w packages/react
 npm run build -w packages/vue
+npm run build -w packages/vanilla
 ```
 
 ## Development workflow
 
-After implementing any new feature: review existing tests to see if they need updating, add new tests if the feature isn't covered, update the demos (`demo/react` and `demo/vue`) to showcase the new feature if applicable, and update any affected Markdown files (CLAUDE.md, READMEs).
+After implementing any new feature: review existing tests to see if they need updating, add new tests if the feature isn't covered, update the demos (`demo/react`, `demo/vue`, and `demo/vanilla`) to showcase the new feature if applicable, and update any affected Markdown files (CLAUDE.md, READMEs).
 
 ## Architecture
 
-This is an **npm workspaces monorepo** with three publishable packages and two demo apps:
+This is an **npm workspaces monorepo** with four publishable packages and three demo apps:
 
 ```
 packages/
-  core/    — @vates/flexi-table-core   (pure TS, zero dependencies)
-  react/   — @vates/flexi-table-react  (peer dep: react)
-  vue/     — @vates/flexi-table-vue    (peer dep: vue)
+  core/    — @vates/flexi-table-core    (pure TS, zero dependencies)
+  react/   — @vates/flexi-table-react   (peer dep: react)
+  vue/     — @vates/flexi-table-vue     (peer dep: vue)
+  vanilla/ — @vates/flexi-table-vanilla (no framework dependency)
 demo/
   react/   — Vite app consuming @vates/flexi-table-react
   vue/     — Vite app consuming @vates/flexi-table-vue
+  vanilla/ — Vite app consuming @vates/flexi-table-vanilla
 ```
 
 ### Core package (`packages/core`)
@@ -72,6 +78,18 @@ Vue customization uses **scoped slots** instead of render props:
 - `#filter-{key}` — custom filter dropdown label; slot scope: `{ value: string }`
 - `#group-{key}` — custom group header value; slot scope: `{ value: unknown, row: TRow }`
 
+### Vanilla package (`packages/vanilla`)
+
+- **`types.ts`** — `ColumnDef<TRow>` is a type alias for `ColumnDefBase<TRow>` (no render props; only `format` for string output)
+- **`styles.ts`** — CSS string injected once into `<head>` via a `<style data-ft-styles>` tag on first `createFlexiTable` call
+- **`index.ts`** — exports `createFlexiTable(container, options)` which returns `{ setData, setColumns, destroy }`
+
+`createFlexiTable` manages all state in a closure, re-renders via `innerHTML` on every state change, and uses **event delegation** (single `click`/`input`/`change` listener on the container). All interactive elements carry `data-action` attributes; the handler dispatches on those. Dropdowns open/close state is tracked in the closure (`openDropdown: string | null`) and re-rendered into the HTML on each update.
+
+Focus is saved/restored across re-renders (via `data-focus-key` attributes on range filter inputs) so typing in numeric range filters doesn't lose cursor position.
+
+Cell customization uses `col.format(value) → string` only — no JSX/DOM nodes. For richer cells, consumers can post-process the container DOM after `setData`.
+
 ### Row selection
 
 Selection lives in `useTableState` in both adapters. Key design notes:
@@ -101,4 +119,4 @@ Packages and demo apps resolve each other without a build step via:
 - **`tsconfig.json` `paths`** — maps `@vates/flexi-table-core` → `../core/src/index.ts` and `@vates/flexi-table-core/locales` → `../core/src/locales.ts` for type checking
 - **`vite.config.ts` `resolve.alias`** — maps `@vates/flexi-table-core` to the `packages/core/src` **directory** (not `index.ts`) so Vite's prefix substitution resolves both the bare import and the `/locales` sub-path correctly
 
-In production, `npm run build` must run `core` before `react` and `vue` since they import from its `dist/`.
+In production, `npm run build` must run `core` before `react`, `vue`, and `vanilla` since they import from its `dist/`.

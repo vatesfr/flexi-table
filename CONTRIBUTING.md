@@ -35,9 +35,7 @@ npm run build -w packages/core   # single package
 ## Type checking
 
 ```bash
-npm run type-check     # checks core, react, and vanilla
-# For Vue (uses vue-tsc):
-npm run type-check -w packages/vue
+npm run type-check     # checks all four packages (vue-tsc for Vue, tsc for the rest)
 ```
 
 ## Project structure

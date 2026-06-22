@@ -17,11 +17,15 @@
     "lint": "eslint .",
     "prepare": "husky"
   },
+  "lint-staged": {
+    "*": "prettier --ignore-unknown --write"
+  },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "eslint": "^9.0.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "husky": "^9.1.7",
+    "lint-staged": "^17.0.8",
     "prettier": "^3.8.4",
     "typescript-eslint": "^8.0.0"
   }

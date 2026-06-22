@@ -10,6 +10,7 @@
     "isolatedModules": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "incremental": true,
     "paths": {
       "@vates/flexi-table-core": ["../core/src/index.ts"],
       "@vates/flexi-table-core/locales": ["../core/src/locales.ts"]

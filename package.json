@@ -18,7 +18,8 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*": "prettier --ignore-unknown --write"
+    "*": "prettier --ignore-unknown --write",
+    "*.{js,mjs,cjs,ts,tsx,vue}": "eslint --fix"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
